@@ -13,7 +13,14 @@
 <body>
 <div class="container">
     <div class="jumbotron mt-3">
-        <h1>Housing Prices Prediction</h1>
+        <div class="row">
+            <div class="col">
+                <h1>Housing Prices Prediction</h1>
+            </div>
+            <div class="col">
+                <h1 style="color:green; text-align: end">{{prediction}}</h1>
+            </div>
+        </div>
         <form>
             <div class="form-group">
                 <label for="model">Model</label>
@@ -29,14 +36,9 @@
                         <option value="1">Decision Tree</option>
                     {% endif %}
                     {% if model == "2" %}
-                        <option value="2" selected>Stochastic Gradient Descent</option>
+                        <option value="2" selected>kNN</option>
                     {% else %}
-                        <option value="2">Stochastic Gradient Descent</option>
-                    {% endif %}
-                    {% if model == "3" %}
-                        <option value="3" selected>kNN</option>
-                    {% else %}
-                        <option value="3">kNN</option>
+                        <option value="2">kNN</option>
                     {% endif %}
                 </select>
             </div>
@@ -63,12 +65,17 @@
             <div class="form-group">
                 <label for="garage">Garage</label>
                 <select class="form-control" id="garage">
-                    <option value="1">Yes</option>
+                    {% if garage == "1" %}
+                    <option value="1" selected>Yes</option>
                     <option value="0">No</option>
+                    {% else %}
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
+                    {% endif %}
                 </select>
             </div>
+            <input class="btn btn-lg btn-primary" role="button" type="submit" value="Predict &raquo;"/>
         </form>
-        <a class="btn btn-lg btn-primary" href="/docs/4.5/components/navbar/" role="button">Predict &raquo;</a>
     </div>
 </div>
 
@@ -77,5 +84,20 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script>
+    $('form').on('submit', function(e){
+        e.preventDefault();
+        const model = $('#model').val();
+        const beds = $('#beds').val();
+        const baths = $('#baths').val();
+        const sqft = $('#sqft').val();
+        const age = $('#age').val();
+        const lotsize = $('#lotsize').val();
+        const garage = $('#garage').val();
+        const baseUrl = window.location.href.split('predict')[0];
+        const url = `${baseUrl}predict/${[model,beds,baths,sqft,age,lotsize,garage].join('/')}`;
+        window.location = url;
+    });
+</script>
 </body>
 </html>
